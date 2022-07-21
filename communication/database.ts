@@ -3,7 +3,7 @@ import { Database, DataTypes, Model, PostgresConnector } from "$denodb/mod.ts";
 
 import { ResourceLoader } from "../helpers/loader.ts";
 
-interface DatabaseUser extends Values {
+export interface DatabaseUser extends Values {
   email: string;
   username: string;
   avatar_url: string;
@@ -35,7 +35,7 @@ export class PostgresDatabase {
     return results;
   }
 
-  async isUserCreated(email: string) {
+  async getUserByEmail(email: string) {
     const results = await User.where("email", email).first();
     return results;
   }

@@ -1,10 +1,10 @@
 /** @jsx h */
 import { h } from "preact";
 import { tw } from "@twind";
-import { HandlerContext, Handlers } from "$fresh/server.ts";
+import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 
 import { auth0Api } from "../communication/auth0.ts";
-import { databaseLoader } from "../communication/database.ts";
+import { databaseLoader, DatabaseUser } from "../communication/database.ts";
 
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 
@@ -13,10 +13,13 @@ export const handler: Handlers = {
     // check for access token cookie
     const maybeAccessToken = getCookies(req.headers)["deploy_access_token"];
     if (maybeAccessToken) {
-      const { email } = await auth0Api.getUserData(maybeAccessToken);
+      const email = await auth0Api.getUserEmail(maybeAccessToken);
       if (email) {
-        console.log(email);
-        return ctx.render();
+        const postgresDatabase = await databaseLoader.getInstance();
+        const user = await postgresDatabase.getUserByEmail(email);
+        await postgresDatabase.close();
+
+        return ctx.render(user);
       }
     }
 
@@ -24,17 +27,16 @@ export const handler: Handlers = {
     const url = new URL(req.url);
     const code = url.searchParams.get("code");
     if (!code) {
-      console.log("logged out");
       return ctx.render();
     }
 
     const accessToken = await auth0Api.getAccessToken(code, url.origin);
-    const { email } = await auth0Api.getUserData(accessToken);
+    const email = await auth0Api.getUserEmail(accessToken);
 
     const postgresDatabase = await databaseLoader.getInstance();
-    const isUserCreated = await postgresDatabase.isUserCreated(email);
+    const user = await postgresDatabase.getUserByEmail(email);
 
-    if (!isUserCreated) {
+    if (!user) {
       await postgresDatabase.createUser({
         email,
         username: "",
@@ -43,28 +45,35 @@ export const handler: Handlers = {
     }
     await postgresDatabase.close();
 
-    const response = await ctx.render();
+    const response = await ctx.render(user);
     setCookie(response.headers, {
       name: "deploy_access_token",
       value: accessToken,
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true,
     });
-    console.log("logged in");
     return response;
   },
 };
 
-export default function Home() {
+export default function Home({ data }: PageProps<DatabaseUser>) {
+  if (!data) {
+    return (
+      <div class={tw`flex justify-center items-center flex-col`}>
+        <a
+          href="/api/login"
+          class={tw
+            `bg-gray-900 text-gray-100 hover:text-white shadow font-bold text-sm py-3 px-4 rounded flex justify-start items-center cursor-pointer mt-2`}
+        >
+          <span>Sign in</span>
+        </a>
+      </div>
+    );
+  }
+
   return (
     <div class={tw`flex justify-center items-center flex-col`}>
-      <a
-        href="/api/login"
-        class={tw
-          `bg-gray-900 text-gray-100 hover:text-white shadow font-bold text-sm py-3 px-4 rounded flex justify-start items-center cursor-pointer mt-2`}
-      >
-        <span>Sign in</span>
-      </a>
+      {JSON.stringify(data)}
       <a
         href="/api/logout"
         class={tw
