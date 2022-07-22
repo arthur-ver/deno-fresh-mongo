@@ -31,7 +31,6 @@ export class PostgresDatabase {
 
   async createUser(user: DatabaseUser) {
     const results = await User.create(user);
-    console.log(results);
     return results;
   }
 

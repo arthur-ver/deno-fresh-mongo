@@ -35,8 +35,8 @@ export class Auth0Api {
   async getUserEmail(access_token: string) {
     const response = await fetch(`${Deno.env.get("AUTH_DOMAIN")}/userinfo`, {
       headers: {
-        Authorization: `Bearer ${access_token}`
-      }
+        Authorization: `Bearer ${access_token}`,
+      },
     });
 
     if (!response.ok) {
@@ -44,7 +44,7 @@ export class Auth0Api {
     }
 
     const userData = await response.json();
-    const { email } = userData
+    const { email } = userData;
 
     return email as string;
   }

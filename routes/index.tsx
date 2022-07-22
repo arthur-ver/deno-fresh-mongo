@@ -1,12 +1,14 @@
 /** @jsx h */
 import { h } from "preact";
-import { tw } from "@twind";
+import { css, tw } from "@twind";
 import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 
 import { auth0Api } from "../communication/auth0.ts";
 import { databaseLoader, DatabaseUser } from "../communication/database.ts";
 
 import { getCookies, setCookie } from "$std/http/cookie.ts";
+
+import Tabs from "../islands/Tabs.tsx";
 
 export const handler: Handlers = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -59,7 +61,42 @@ export const handler: Handlers = {
 export default function Home({ data }: PageProps<DatabaseUser>) {
   if (!data) {
     return (
-      <div class={tw`flex justify-center items-center flex-col`}>
+      <div class={tw`w-10/12 sm:w-96 mx-auto`}>
+        <div class={tw`flex flex-col w-full mt-12 mb-28`}>
+          <div class={tw`flex flex-col w-full w-full rounded-xl p-4`}>
+            <div
+              class={tw`mb-4 w-28 h-28 rounded-2xl bg-cover ${
+                css({
+                  "background-image":
+                    'url("https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250")',
+                })
+              }`}
+            >
+            </div>
+            <h1 class={tw`mb-2 font-sans text-2xl font-bold`}>@johnsmith</h1>
+            <p class={tw`mb-4 text-gray-500 font-sans text-sm`}>
+              At vero eos et accusam et justo duo dolores et ea rebum. Stet
+              clita kasd gubergren.
+            </p>
+            <div class={tw`mb-4 flex flex-row space-x-3`}>
+              <button
+                class={tw
+                  `bg-gray-900 text-gray-100 shadow font-bold text-sm py-3 px-6 rounded-lg cursor-pointer mt-2 ${
+                    css({ "flex-grow": "1" })
+                  }`}
+              >
+                Contact
+              </button>
+              <button
+                class={tw
+                  `bg-blue-700 text-gray-100 font-bold text-sm py-3 px-6 rounded-lg cursor-pointer mt-2`}
+              >
+                Follow
+              </button>
+            </div>
+            <Tabs />
+          </div>
+        </div>
         <a
           href="/api/login"
           class={tw
