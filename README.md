@@ -1,4 +1,4 @@
-# Deno + Fresh + PostgreSQL
+# Deno + Fresh + MongoDB
 
 ### Usage
 
