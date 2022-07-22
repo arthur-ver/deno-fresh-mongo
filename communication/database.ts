@@ -19,7 +19,7 @@ export class MongoDBDatabase {
       }/endpoint/data/v1`,
       dataSource: Deno.env.get("ATLAS_DATA_SOURCE") || "", // e.g. "Cluster0"
       auth: {
-        apiKey: Deno.env.get("ATLAS_DATA_API_KEY")  || ""
+        apiKey: Deno.env.get("ATLAS_DATA_API_KEY") || "",
       },
     });
     this.#db = this.#client.database("database");
@@ -28,9 +28,9 @@ export class MongoDBDatabase {
 
   async createUser(email: string) {
     const result = await this.#users.insertOne({
-        email,
-        username: "",
-        bio: ""
+      email,
+      username: "",
+      bio: "",
     });
     return result;
   }

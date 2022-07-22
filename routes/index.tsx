@@ -5,7 +5,6 @@ import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 
 import { auth0Api } from "../communication/auth0.ts";
 import { database } from "../communication/database.ts";
-//import { databaseLoader, DatabaseUser } from "../communication/database.ts";
 
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 
@@ -41,11 +40,13 @@ export const handler: Handlers = {
       await database.createUser(email);
     }
 
-    const response = await ctx.render(user ? user : {
-      email,
-      username: "",
-      bio: ""
-    });
+    const response = await ctx.render(
+      user ? user : {
+        email,
+        username: "",
+        bio: "",
+      },
+    );
     setCookie(response.headers, {
       name: "deploy_access_token",
       value: accessToken,
