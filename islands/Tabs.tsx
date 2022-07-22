@@ -3,6 +3,8 @@ import { h } from "preact";
 import { tw } from "@twind";
 import { useEffect, useState } from "preact/hooks";
 
+import { ExternalLink, Link } from "preact-feather";
+
 export default function Tabs(props: any) {
   const [openTab, setOpenTab] = useState(1);
 
@@ -58,28 +60,78 @@ export default function Tabs(props: any) {
             <div class={tw`tab-content tab-space`}>
               <div class={tw`${openTab === 1 ? "block" : "hidden"}`}>
                 <ul class={tw`space-y-2`}>
-                    <li>
-                        <a class={tw`block bg-green-100 rounded-2xl px-4 py-4 w-full`} href="#" target="_blank" rel="noopener noreferrer">
-                            Print Shop
-                        </a>
-                    </li>
-                    <li>
-                        <a class={tw`block bg-green-100 rounded-2xl px-4 py-4 w-full`} href="#" target="_blank" rel="noopener noreferrer">
-                            Print Shop
-                        </a>
-                    </li>
+                  <li>
+                    <a
+                      class={tw
+                        `flex justify-between bg-green-100 rounded-2xl px-4 py-4 w-full`}
+                      href="#"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>Print Shop</span>
+                      <Link size={22} />
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class={tw
+                        `flex justify-between bg-green-100 rounded-2xl px-4 py-4 w-full`}
+                      href="#"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>Print Shop</span>
+                      <Link size={22} />
+                    </a>
+                  </li>
                 </ul>
               </div>
-              <div class={tw`${openTab === 2 ? "block" : "hidden"}`}>
-                <div class={tw`bg-white rounded-2xl px-4 py-4 shadow`}>
-                  <h2 class={tw`text-lg font-bold text-gray-900 leading-tight mb-1`}>
+              <div class={tw`${openTab === 2 ? "block space-y-3" : "hidden"}`}>
+                <div class={tw`relative bg-white rounded-2xl px-4 py-4 shadow`}>
+                  <h2
+                    class={tw
+                      `text-lg font-bold text-gray-900 leading-tight mb-1`}
+                  >
                     Zine available for purchase!
                   </h2>
-                  <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>22. Juli 2022</h4>
+                  <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>
+                    22. Juli 2022
+                  </h4>
                   <p class={tw`text-sm text-gray-600`}>
                     Stet clita kasd gubergren, no sea takimata sanctus est Lorem
                     ipsum dolor sit amet.
                   </p>
+                  <a
+                    class={tw`block absolute top-0 right-0 p-3`}
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink size={22} />
+                  </a>
+                </div>
+                <div class={tw`relative bg-white rounded-2xl px-4 py-4 shadow`}>
+                  <h2
+                    class={tw
+                      `text-lg font-bold text-gray-900 leading-tight mb-1`}
+                  >
+                    Zine available for purchase!
+                  </h2>
+                  <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>
+                    22. Juli 2022
+                  </h4>
+                  <p class={tw`text-sm text-gray-600`}>
+                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                    ipsum dolor sit amet.
+                  </p>
+                  <a
+                    class={tw`block absolute top-0 right-0 p-3`}
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink size={22} />
+                  </a>
                 </div>
               </div>
             </div>

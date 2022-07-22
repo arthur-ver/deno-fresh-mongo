@@ -1,73 +1,44 @@
-import { Values } from "$denodb/lib/data-types.ts";
-import { Database, DataTypes, Model, PostgresConnector } from "$denodb/mod.ts";
+import { MongoClient, ObjectId } from "$atlas_sdk/mod.ts";
 
-import { ResourceLoader } from "../helpers/loader.ts";
-
-export interface DatabaseUser extends Values {
-  email: string;
+interface UserSchema {
+  _id?: ObjectId;
   username: string;
-  avatar_url: string;
+  email: string;
+  bio: string;
 }
 
-export class PostgresDatabase {
-  #connector: PostgresConnector;
-  #db: Database;
+export class MongoDBDatabase {
+  #client: MongoClient;
+  #db: ReturnType<MongoClient["database"]>;
+  #users;
 
   constructor() {
-    this.#connector = new PostgresConnector({
-      database: Deno.env.get("HEROKU_DB")!,
-      host: Deno.env.get("HEROKU_HOST")!,
-      username: Deno.env.get("HEROKU_USER")!,
-      password: Deno.env.get("HEROKU_PASSWORD")!,
-      port: 5432,
+    this.#client = new MongoClient({
+      endpoint: `https://data.mongodb-api.com/app/${
+        Deno.env.get("ATLAS_APP_ID")
+      }/endpoint/data/v1`,
+      dataSource: Deno.env.get("ATLAS_DATA_SOURCE") || "", // e.g. "Cluster0"
+      auth: {
+        apiKey: Deno.env.get("ATLAS_DATA_API_KEY")  || ""
+      },
     });
-    this.#db = new Database(this.#connector);
-    this.#db.link([User]);
+    this.#db = this.#client.database("database");
+    this.#users = this.#db.collection<UserSchema>("users");
   }
 
-  async sync() {
-    await this.#db.sync();
-  }
-
-  async createUser(user: DatabaseUser) {
-    const results = await User.create(user);
-    return results;
+  async createUser(email: string) {
+    const result = await this.#users.insertOne({
+        email,
+        username: "",
+        bio: ""
+    });
+    return result;
   }
 
   async getUserByEmail(email: string) {
-    const results = await User.where("email", email).first();
-    return results;
-  }
-
-  async close() {
-    await this.#db.close();
+    const result = await this.#users.findOne({ email });
+    return result;
   }
 }
 
-class User extends Model {
-  static table = "users";
-
-  static fields = {
-    id: {
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    username: {
-      type: DataTypes.TEXT,
-    },
-    email: {
-      type: DataTypes.TEXT,
-    },
-    avatar_url: {
-      type: DataTypes.TEXT,
-    },
-  };
-}
-
-export const databaseLoader = new ResourceLoader<PostgresDatabase>({
-  async load() {
-    const postgresDatabase = new PostgresDatabase();
-    await postgresDatabase.sync();
-    return Promise.resolve(postgresDatabase);
-  },
-});
+export const database = new MongoDBDatabase();

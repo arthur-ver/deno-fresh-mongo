@@ -4,7 +4,8 @@ import { css, tw } from "@twind";
 import { HandlerContext, Handlers, PageProps } from "$fresh/server.ts";
 
 import { auth0Api } from "../communication/auth0.ts";
-import { databaseLoader, DatabaseUser } from "../communication/database.ts";
+import { database } from "../communication/database.ts";
+//import { databaseLoader, DatabaseUser } from "../communication/database.ts";
 
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 
@@ -19,10 +20,7 @@ export const handler: Handlers = {
     if (maybeAccessToken) {
       const email = await auth0Api.getUserEmail(maybeAccessToken);
       if (email) {
-        const postgresDatabase = await databaseLoader.getInstance();
-        const user = await postgresDatabase.getUserByEmail(email);
-        await postgresDatabase.close();
-
+        const user = await database.getUserByEmail(email);
         return ctx.render(user);
       }
     }
@@ -37,19 +35,17 @@ export const handler: Handlers = {
     const accessToken = await auth0Api.getAccessToken(code, url.origin);
     const email = await auth0Api.getUserEmail(accessToken);
 
-    const postgresDatabase = await databaseLoader.getInstance();
-    const user = await postgresDatabase.getUserByEmail(email);
+    const user = await database.getUserByEmail(email);
 
     if (!user) {
-      await postgresDatabase.createUser({
-        email,
-        username: "",
-        avatar_url: "",
-      });
+      await database.createUser(email);
     }
-    await postgresDatabase.close();
 
-    const response = await ctx.render(user);
+    const response = await ctx.render(user ? user : {
+      email,
+      username: "",
+      bio: ""
+    });
     setCookie(response.headers, {
       name: "deploy_access_token",
       value: accessToken,
@@ -60,7 +56,7 @@ export const handler: Handlers = {
   },
 };
 
-export default function Home({ data }: PageProps<DatabaseUser>) {
+export default function Home({ data }: PageProps) {
   if (!data) {
     return (
       <div class={tw`w-10/12 sm:w-96 mx-auto`}>
@@ -99,10 +95,13 @@ export default function Home({ data }: PageProps<DatabaseUser>) {
             <div class={tw`bg-purple-100 rounded-2xl px-4 py-4 mb-4`}>
               <div class={tw`flex justify-between space-x-4`}>
                 <div class={tw`w-12`}>
-                  <Star color={"#968db8"}/>
+                  <Star color={"#968db8"} />
                 </div>
                 <div>
-                  <h2 class={tw`text-md font-bold text-gray-900 leading-tight mb-1`}>
+                  <h2
+                    class={tw
+                      `text-md font-bold text-gray-900 leading-tight mb-1`}
+                  >
                     My first announcement!
                   </h2>
                   <p class={tw`text-sm text-gray-600`}>
