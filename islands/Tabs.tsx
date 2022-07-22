@@ -30,7 +30,7 @@ export default function Tabs(props: any) {
               href="#"
               role="tablist"
             >
-              News
+              Links
             </a>
           </li>
           <li class={tw`-mb-px mr-2 last:mr-0 flex-auto text-center`}>
@@ -49,7 +49,7 @@ export default function Tabs(props: any) {
               href="#"
               role="tablist"
             >
-              Links
+              Updates
             </a>
           </li>
         </ul>
@@ -57,22 +57,30 @@ export default function Tabs(props: any) {
           <div class={tw`flex-auto`}>
             <div class={tw`tab-content tab-space`}>
               <div class={tw`${openTab === 1 ? "block" : "hidden"}`}>
-                <div class={tw`bg-purple-100 rounded-2xl px-4 py-4`}>
-                  <h2 class={tw`text-md font-bold mb-1 text-gray-900`}>
-                    My first announcement!
+                <ul class={tw`space-y-2`}>
+                    <li>
+                        <a class={tw`block bg-green-100 rounded-2xl px-4 py-4 w-full`} href="#" target="_blank" rel="noopener noreferrer">
+                            Print Shop
+                        </a>
+                    </li>
+                    <li>
+                        <a class={tw`block bg-green-100 rounded-2xl px-4 py-4 w-full`} href="#" target="_blank" rel="noopener noreferrer">
+                            Print Shop
+                        </a>
+                    </li>
+                </ul>
+              </div>
+              <div class={tw`${openTab === 2 ? "block" : "hidden"}`}>
+                <div class={tw`bg-white rounded-2xl px-4 py-4 shadow`}>
+                  <h2 class={tw`text-lg font-bold text-gray-900 leading-tight mb-1`}>
+                    Zine available for purchase!
                   </h2>
+                  <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>22. Juli 2022</h4>
                   <p class={tw`text-sm text-gray-600`}>
                     Stet clita kasd gubergren, no sea takimata sanctus est Lorem
                     ipsum dolor sit amet.
                   </p>
                 </div>
-              </div>
-              <div class={tw`${openTab === 2 ? "block" : "hidden"}`}>
-                <p>
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua.
-                </p>
               </div>
             </div>
           </div>

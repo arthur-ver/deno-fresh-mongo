@@ -10,6 +10,8 @@ import { getCookies, setCookie } from "$std/http/cookie.ts";
 
 import Tabs from "../islands/Tabs.tsx";
 
+import { Star } from "preact-feather";
+
 export const handler: Handlers = {
   async GET(req: Request, ctx: HandlerContext) {
     // check for access token cookie
@@ -93,6 +95,22 @@ export default function Home({ data }: PageProps<DatabaseUser>) {
               >
                 Follow
               </button>
+            </div>
+            <div class={tw`bg-purple-100 rounded-2xl px-4 py-4 mb-4`}>
+              <div class={tw`flex justify-between space-x-4`}>
+                <div class={tw`w-12`}>
+                  <Star color={"#968db8"}/>
+                </div>
+                <div>
+                  <h2 class={tw`text-md font-bold text-gray-900 leading-tight mb-1`}>
+                    My first announcement!
+                  </h2>
+                  <p class={tw`text-sm text-gray-600`}>
+                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+                    ipsum dolor sit amet.
+                  </p>
+                </div>
+              </div>
             </div>
             <Tabs />
           </div>
