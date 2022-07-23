@@ -1,9 +1,19 @@
 import { MongoClient, ObjectId } from "$atlas_sdk/mod.ts";
+import { Collection, Database } from "$atlas_sdk/client.ts";
+import { Document } from "$atlas_sdk/deps.ts";
 
 interface LinkSchema {
   _id?: ObjectId;
   title: string;
   url: string;
+}
+
+interface UpdateSchema {
+  _id?: ObjectId;
+  title: string;
+  date: Date;
+  text: string;
+  url?: string;
 }
 
 interface UserSchema {
@@ -12,13 +22,15 @@ interface UserSchema {
   email: string;
   bio: string;
   linksList: Array<ObjectId>;
+  updatesList: Array<ObjectId>;
 }
 
 export class MongoDBDatabase {
   #client: MongoClient;
-  #db: ReturnType<MongoClient["database"]>;
-  #users;
-  #links;
+  #db: Database;
+  #users: Collection<Document>;
+  #links: Collection<Document>;
+  #updates: Collection<Document>;
 
   constructor() {
     this.#client = new MongoClient({
@@ -33,14 +45,25 @@ export class MongoDBDatabase {
     this.#db = this.#client.database("database");
     this.#users = this.#db.collection<UserSchema>("users");
     this.#links = this.#db.collection<LinkSchema>("links");
+    this.#updates = this.#db.collection<UpdateSchema>("updates");
   }
 
   async createUser(email: string) {
+    let usernameExists;
+    let username: string;
+
+    do {
+      const randomNumber = Math.floor(1000 + Math.random() * 9000).toString();
+      username = email.split("@")[0].concat(randomNumber);
+      usernameExists = await this.#users.findOne({ username });
+    } while (usernameExists);
+
     const { insertedId } = await this.#users.insertOne({
       email,
-      username: "",
+      username,
       bio: "",
       linksList: [],
+      updatesList: []
     });
     return insertedId;
   }
@@ -50,18 +73,34 @@ export class MongoDBDatabase {
     return result;
   }
 
-  async createLinkForUser(userId: string, title: string, url: string) {
+  async createLinkForUser(_id: string, title: string, url: string) {
     const { insertedId } = await this.#links.insertOne({
       title,
       url,
     });
 
-    this.#users.countDocuments({ active: true });
-    const result = await this.#users.updateOne({ _id: userId }, {
+    await this.#users.updateOne({ _id }, {
       $push: { linksList: insertedId },
     });
+  }
 
-    return result;
+  async createUpdateForUser(
+    _id: string,
+    title: string,
+    date: Date,
+    text: string,
+    url?: string,
+  ) {
+    const { insertedId } = await this.#updates.insertOne({
+      title,
+      date,
+      text,
+      url,
+    });
+
+    await this.#users.updateOne({ _id }, {
+      $push: { updatesList: insertedId },
+    });
   }
 }
 
