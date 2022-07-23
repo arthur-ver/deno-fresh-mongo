@@ -8,9 +8,14 @@ import { database } from "../communication/database.ts";
 
 import { getCookies, setCookie } from "$std/http/cookie.ts";
 
-import Tabs from "../islands/Tabs.tsx";
+import ProfilePicture from "../islands/ProfilePicture.tsx";
+import Username from "../islands/Username.tsx";
+import Bio from "../islands/Bio.tsx";
+import CTAButton from "../islands/CTAButton.tsx";
+import FollowButton from "../islands/FollowButton.tsx";
+import Announcement from "../islands/Announcement.tsx";
 
-import { Star } from "preact-feather";
+import Tabs from "../islands/Tabs.tsx";
 
 export const handler: Handlers = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -55,58 +60,24 @@ export const handler: Handlers = {
 export default function Home({ data }: PageProps) {
   if (!data) {
     return (
-      <div class={tw`w-10/12 sm:w-96 mx-auto`}>
+      <main class={tw`w-10/12 sm:w-96 mx-auto`}>
         <div class={tw`flex flex-col w-full mt-12 mb-28`}>
           <div class={tw`flex flex-col w-full w-full rounded-xl p-4`}>
-            <div
-              class={tw`mb-4 w-28 h-28 rounded-2xl bg-cover ${
-                css({
-                  "background-image":
-                    'url("https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250")',
-                })
-              }`}
-            >
-            </div>
-            <h1 class={tw`mb-2 font-sans text-2xl font-bold`}>@johnsmith</h1>
-            <p class={tw`mb-4 text-gray-500 font-sans text-sm`}>
-              At vero eos et accusam et justo duo dolores et ea rebum. Stet
-              clita kasd gubergren.
-            </p>
+            <ProfilePicture
+              avatar={"https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"}
+            />
+            <Username username={"@johnsmith"} />
+            <Bio
+              bio={"At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren."}
+            />
             <div class={tw`mb-4 flex flex-row space-x-3`}>
-              <button
-                class={tw
-                  `bg-gray-900 text-gray-100 shadow font-bold text-sm py-3 px-6 rounded-lg cursor-pointer mt-2 ${
-                    css({ "flex-grow": "1" })
-                  }`}
-              >
-                Contact
-              </button>
-              <button
-                class={tw
-                  `bg-blue-700 text-gray-100 font-bold text-sm py-3 px-6 rounded-lg cursor-pointer mt-2`}
-              >
-                Follow
-              </button>
+              <CTAButton title={"Contact"} />
+              <FollowButton title={"Follow"} />
             </div>
-            <div class={tw`bg-purple-100 rounded-2xl px-4 py-4 mb-4`}>
-              <div class={tw`flex justify-between space-x-4`}>
-                <div class={tw`w-12`}>
-                  <Star color={"#968db8"} />
-                </div>
-                <div>
-                  <h2
-                    class={tw
-                      `text-md font-bold text-gray-900 leading-tight mb-1`}
-                  >
-                    My first announcement!
-                  </h2>
-                  <p class={tw`text-sm text-gray-600`}>
-                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                    ipsum dolor sit amet.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <Announcement
+              title={"My first announcement!"}
+              text={"Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."}
+            />
             <Tabs />
           </div>
         </div>
@@ -117,7 +88,7 @@ export default function Home({ data }: PageProps) {
         >
           <span>Sign in</span>
         </a>
-      </div>
+      </main>
     );
   }
 

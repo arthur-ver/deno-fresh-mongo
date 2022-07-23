@@ -16,9 +16,10 @@ interface UpdateSchema {
   url?: string;
 }
 
-interface UserSchema {
+export interface UserSchema {
   _id?: ObjectId;
   username: string;
+  avatar: string;
   email: string;
   bio: string;
   linksList: Array<ObjectId>;
@@ -28,9 +29,9 @@ interface UserSchema {
 export class MongoDBDatabase {
   #client: MongoClient;
   #db: Database;
-  #users: Collection<Document>;
-  #links: Collection<Document>;
-  #updates: Collection<Document>;
+  #users: Collection<UserSchema>;
+  #links: Collection<LinkSchema>;
+  #updates: Collection<UpdateSchema>;
 
   constructor() {
     this.#client = new MongoClient({
@@ -61,14 +62,15 @@ export class MongoDBDatabase {
     const { insertedId } = await this.#users.insertOne({
       email,
       username,
+      avatar: "",
       bio: "",
       linksList: [],
-      updatesList: []
+      updatesList: [],
     });
     return insertedId;
   }
 
-  async getUser(filter: { _id?: string; email?: string }) {
+  async getUser(filter: { _id?: string; email?: string; username?: string }) {
     const result = await this.#users.findOne(filter);
     return result;
   }

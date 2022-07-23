@@ -2,19 +2,33 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/api/login.ts";
-import * as $1 from "./routes/api/logout.ts";
-import * as $2 from "./routes/index.tsx";
-import * as $$0 from "./islands/Tabs.tsx";
+import * as $0 from "./routes/[username].tsx";
+import * as $1 from "./routes/api/login.ts";
+import * as $2 from "./routes/api/logout.ts";
+import * as $3 from "./routes/index.tsx";
+import * as $$0 from "./islands/Announcement.tsx";
+import * as $$1 from "./islands/Bio.tsx";
+import * as $$2 from "./islands/CTAButton.tsx";
+import * as $$3 from "./islands/FollowButton.tsx";
+import * as $$4 from "./islands/ProfilePicture.tsx";
+import * as $$5 from "./islands/Tabs.tsx";
+import * as $$6 from "./islands/Username.tsx";
 
 const manifest = {
   routes: {
-    "./routes/api/login.ts": $0,
-    "./routes/api/logout.ts": $1,
-    "./routes/index.tsx": $2,
+    "./routes/[username].tsx": $0,
+    "./routes/api/login.ts": $1,
+    "./routes/api/logout.ts": $2,
+    "./routes/index.tsx": $3,
   },
   islands: {
-    "./islands/Tabs.tsx": $$0,
+    "./islands/Announcement.tsx": $$0,
+    "./islands/Bio.tsx": $$1,
+    "./islands/CTAButton.tsx": $$2,
+    "./islands/FollowButton.tsx": $$3,
+    "./islands/ProfilePicture.tsx": $$4,
+    "./islands/Tabs.tsx": $$5,
+    "./islands/Username.tsx": $$6,
   },
   baseUrl: import.meta.url,
 };
