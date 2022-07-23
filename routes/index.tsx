@@ -19,7 +19,7 @@ export const handler: Handlers = {
     if (maybeAccessToken) {
       const email = await auth0Api.getUserEmail(maybeAccessToken);
       if (email) {
-        const user = await database.getUserByEmail(email);
+        const user = await database.getUser({ email });
         return ctx.render(user);
       }
     }
@@ -34,19 +34,14 @@ export const handler: Handlers = {
     const accessToken = await auth0Api.getAccessToken(code, url.origin);
     const email = await auth0Api.getUserEmail(accessToken);
 
-    const user = await database.getUserByEmail(email);
+    let user = await database.getUser({ email });
 
     if (!user) {
-      await database.createUser(email);
+      const _id = await database.createUser(email);
+      user = await database.getUser({ _id });
     }
 
-    const response = await ctx.render(
-      user ? user : {
-        email,
-        username: "",
-        bio: "",
-      },
-    );
+    const response = await ctx.render(user);
     setCookie(response.headers, {
       name: "deploy_access_token",
       value: accessToken,

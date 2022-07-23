@@ -9,6 +9,6 @@
     "twind": "https://esm.sh/twind@0.16.17",
     "twind/": "https://esm.sh/twind@0.16.17/",
     "preact-feather": "https://cdn.skypack.dev/preact-feather@4.2.1",
-    "$atlas_sdk/": "https://deno.land/x/atlas_sdk@v1.0.2/"
+    "$atlas_sdk/": "https://raw.githubusercontent.com/arthur-ver/atlas_sdk/main/"
   }
 }
