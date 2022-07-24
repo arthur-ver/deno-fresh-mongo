@@ -9,8 +9,8 @@ export default function Announcement(props: { title: string; text: string }) {
 
   return (
     <div class={tw`bg-purple-100 rounded-2xl px-4 py-4 mb-4`}>
-      <div class={tw`flex justify-between space-x-4`}>
-        <div class={tw`w-12`}>
+      <div class={tw`flex space-x-4`}>
+        <div>
           <Star color={"#968db8"} />
         </div>
         <div>

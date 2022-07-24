@@ -46,7 +46,7 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
   }
 
   const { user, links, updates } = data;
-  const { avatar, bio, username } = user;
+  const { avatar, bio, username, announcement } = user;
 
   return (
     <main class={tw`w-10/12 sm:w-96 mx-auto`}>
@@ -63,10 +63,13 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
             <CTAButton title={"Contact"} />
             <FollowButton title={"Follow"} />
           </div>
-          <Announcement
-            title={"My first announcement!"}
-            text={"Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."}
-          />
+          {announcement &&
+            (
+              <Announcement
+                title={announcement.title}
+                text={announcement.text}
+              />
+            )}
           <Tabs links={links} updates={updates} />
         </div>
       </div>

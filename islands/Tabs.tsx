@@ -5,7 +5,7 @@ import { useState } from "preact/hooks";
 
 import { LinkSchema, UpdateSchema } from "../communication/database.ts";
 
-import { ExternalLink, Link } from "preact-feather";
+import { ExternalLink, FileText, Link, List } from "preact-feather";
 
 const options: Intl.DateTimeFormatOptions = {
   weekday: "long",
@@ -76,6 +76,20 @@ export default function Tabs(props: TabsProps) {
             <div class={tw`tab-content tab-space`}>
               <div class={tw`${openTab === 1 ? "block" : "hidden"}`}>
                 <ul class={tw`space-y-2`}>
+                  {links.length === 0 &&
+                    (
+                      <div
+                        class={tw`flex flex-col items-center space-y-1 py-8`}
+                      >
+                        <List size={32} color="#9ca3af" />
+                        <h2
+                          class={tw
+                            `text-sm font-bold text-gray-400 leading-tight mb-1`}
+                        >
+                          No links yet.
+                        </h2>
+                      </div>
+                    )}
                   {links.map((link, index) => (
                     <li key={index}>
                       <a
@@ -93,6 +107,18 @@ export default function Tabs(props: TabsProps) {
                 </ul>
               </div>
               <div class={tw`${openTab === 2 ? "block space-y-3" : "hidden"}`}>
+                {updates.length === 0 &&
+                  (
+                    <div class={tw`flex flex-col items-center space-y-1 py-8`}>
+                      <FileText size={32} color="#9ca3af" />
+                      <h2
+                        class={tw
+                          `text-sm font-bold text-gray-400 leading-tight mb-1`}
+                      >
+                        No posts yet.
+                      </h2>
+                    </div>
+                  )}
                 {updates.slice().sort((a, b) =>
                   (new Date(b.date)).getTime() - (new Date(a.date)).getTime()
                 ).map((update, index) => (

@@ -23,6 +23,10 @@ export interface UserSchema {
   bio: string;
   linksList: Array<ObjectId>;
   updatesList: Array<ObjectId>;
+  announcement?: {
+    title: string;
+    text: string;
+  };
 }
 
 export class MongoDBDatabase {
