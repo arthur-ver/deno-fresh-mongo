@@ -1,12 +1,28 @@
 /** @jsx h */
 import { h } from "preact";
 import { tw } from "@twind";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
+
+import { LinkSchema, UpdateSchema } from "../communication/database.ts";
 
 import { ExternalLink, Link } from "preact-feather";
 
-export default function Tabs(props: any) {
+const options: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
+interface TabsProps {
+  links: LinkSchema[];
+  updates: UpdateSchema[];
+}
+
+export default function Tabs(props: TabsProps) {
   const [openTab, setOpenTab] = useState(1);
+
+  const { links, updates } = props;
 
   return (
     <div class={tw`flex flex-wrap`}>
@@ -60,44 +76,57 @@ export default function Tabs(props: any) {
             <div class={tw`tab-content tab-space`}>
               <div class={tw`${openTab === 1 ? "block" : "hidden"}`}>
                 <ul class={tw`space-y-2`}>
-                  <li>
-                    <a
-                      class={tw
-                        `flex justify-between bg-green-100 rounded-2xl px-4 py-4 w-full`}
-                      href="#"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <span>Print Shop</span>
-                      <Link size={22} />
-                    </a>
-                  </li>
+                  {links.map((link, index) => (
+                    <li key={index}>
+                      <a
+                        class={tw
+                          `flex justify-between bg-green-100 rounded-2xl px-4 py-4 w-full`}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <span>{link.title}</span>
+                        <Link size={22} />
+                      </a>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div class={tw`${openTab === 2 ? "block space-y-3" : "hidden"}`}>
-                <div class={tw`relative bg-white rounded-2xl px-4 py-4 shadow`}>
-                  <h2
-                    class={tw
-                      `text-lg font-bold text-gray-900 leading-tight mb-1`}
+                {updates.slice().sort((a, b) =>
+                  (new Date(b.date)).getTime() - (new Date(a.date)).getTime()
+                ).map((update, index) => (
+                  <div
+                    class={tw`relative bg-white rounded-2xl px-4 py-4 shadow`}
                   >
-                    Zine available for purchase!
-                  </h2>
-                  <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>
-                    22. Juli 2022
-                  </h4>
-                  <p class={tw`text-sm text-gray-600`}>
-                    Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                    ipsum dolor sit amet.
-                  </p>
-                  <a
-                    class={tw`block absolute top-0 right-0 p-3`}
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink size={22} />
-                  </a>
-                </div>
+                    <h2
+                      class={tw
+                        `text-lg font-bold text-gray-900 leading-tight mb-1`}
+                    >
+                      {update.title}
+                    </h2>
+                    <h4 class={tw`text-xs font-semibold text-gray-400 mb-2`}>
+                      {(new Date(update.date)).toLocaleDateString(
+                        undefined,
+                        options,
+                      )}
+                    </h4>
+                    <p class={tw`text-sm text-gray-600`}>
+                      {update.text}
+                    </p>
+                    {update.url &&
+                      (
+                        <a
+                          class={tw`block absolute top-0 right-0 p-3`}
+                          href={update.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink size={22} />
+                        </a>
+                      )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

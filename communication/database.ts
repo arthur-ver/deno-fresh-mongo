@@ -1,14 +1,13 @@
 import { MongoClient, ObjectId } from "$atlas_sdk/mod.ts";
 import { Collection, Database } from "$atlas_sdk/client.ts";
-import { Document } from "$atlas_sdk/deps.ts";
 
-interface LinkSchema {
+export interface LinkSchema {
   _id?: ObjectId;
   title: string;
   url: string;
 }
 
-interface UpdateSchema {
+export interface UpdateSchema {
   _id?: ObjectId;
   title: string;
   date: Date;
@@ -103,6 +102,16 @@ export class MongoDBDatabase {
     await this.#users.updateOne({ _id }, {
       $push: { updatesList: insertedId },
     });
+  }
+
+  async getLinks(ids: ObjectId[]) {
+    const result = await this.#links.find({ _id: { $in: ids } });
+    return result;
+  }
+
+  async getUpdates(ids: ObjectId[]) {
+    const result = await this.#updates.find({ _id: { $in: ids } });
+    return result;
   }
 }
 

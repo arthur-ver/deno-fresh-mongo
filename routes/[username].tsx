@@ -3,7 +3,12 @@ import { h } from "preact";
 import { tw } from "@twind";
 import { Handlers, PageProps } from "$fresh/server.ts";
 
-import { database, UserSchema } from "../communication/database.ts";
+import {
+  database,
+  LinkSchema,
+  UpdateSchema,
+  UserSchema,
+} from "../communication/database.ts";
 
 import ProfilePicture from "../islands/ProfilePicture.tsx";
 import Username from "../islands/Username.tsx";
@@ -13,26 +18,35 @@ import FollowButton from "../islands/FollowButton.tsx";
 import Announcement from "../islands/Announcement.tsx";
 import Tabs from "../islands/Tabs.tsx";
 
-export const handler: Handlers<UserSchema | null> = {
+interface UserData {
+  user: UserSchema;
+  links: LinkSchema[];
+  updates: UpdateSchema[];
+}
+
+export const handler: Handlers<UserData | null> = {
   async GET(_, ctx) {
     const { username } = ctx.params;
 
     const user = await database.getUser({ username });
+    const links = await database.getLinks(user.linksList);
+    const updates = await database.getUpdates(user.updatesList);
 
     if (!user) {
       return ctx.render(null);
     }
 
-    return ctx.render(user);
+    return ctx.render({ user, links, updates });
   },
 };
 
-export default function GreetPage({ data }: PageProps<UserSchema | null>) {
+export default function GreetPage({ data }: PageProps<UserData | null>) {
   if (!data) {
     return <h1>404</h1>;
   }
 
-  const { avatar, bio, username } = data;
+  const { user, links, updates } = data;
+  const { avatar, bio, username } = user;
 
   return (
     <main class={tw`w-10/12 sm:w-96 mx-auto`}>
@@ -53,7 +67,7 @@ export default function GreetPage({ data }: PageProps<UserSchema | null>) {
             title={"My first announcement!"}
             text={"Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."}
           />
-          <Tabs />
+          <Tabs links={links} updates={updates} />
         </div>
       </div>
     </main>
