@@ -17,6 +17,7 @@ import CTAButton from "../islands/CTAButton.tsx";
 import FollowButton from "../islands/FollowButton.tsx";
 import Announcement from "../islands/Announcement.tsx";
 import Tabs from "../islands/Tabs.tsx";
+import SocialLinks from "../islands/SocialLinks.tsx";
 
 interface UserData {
   user: UserSchema;
@@ -51,7 +52,9 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
   return (
     <main class={tw`w-10/12 sm:w-96 mx-auto`}>
       <div class={tw`flex flex-col w-full mt-12 mb-28`}>
-        <div class={tw`flex flex-col w-full w-full rounded-xl p-4`}>
+        <div
+          class={tw`flex flex-col items-center w-full w-full rounded-xl p-4`}
+        >
           <ProfilePicture
             avatar={avatar}
           />
@@ -59,10 +62,7 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
           <Bio
             bio={bio}
           />
-          <div class={tw`mb-4 flex flex-row space-x-3`}>
-            <CTAButton title={"Contact"} />
-            <FollowButton title={"Follow"} />
-          </div>
+          <SocialLinks />
           {announcement &&
             (
               <Announcement

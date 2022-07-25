@@ -25,7 +25,7 @@ export default function Tabs(props: TabsProps) {
   const { links, updates } = props;
 
   return (
-    <div class={tw`flex flex-wrap`}>
+    <div class={tw`flex flex-wrap w-full`}>
       <div class={tw`w-full`}>
         <ul
           class={tw
