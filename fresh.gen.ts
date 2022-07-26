@@ -11,7 +11,7 @@ import * as $$1 from "./islands/Bio.tsx";
 import * as $$2 from "./islands/CTAButton.tsx";
 import * as $$3 from "./islands/FollowButton.tsx";
 import * as $$4 from "./islands/ProfilePicture.tsx";
-import * as $$5 from "./islands/SocialLinks.tsx";
+import * as $$5 from "./islands/SocialAccounts.tsx";
 import * as $$6 from "./islands/Tabs.tsx";
 import * as $$7 from "./islands/Username.tsx";
 
@@ -28,7 +28,7 @@ const manifest = {
     "./islands/CTAButton.tsx": $$2,
     "./islands/FollowButton.tsx": $$3,
     "./islands/ProfilePicture.tsx": $$4,
-    "./islands/SocialLinks.tsx": $$5,
+    "./islands/SocialAccounts.tsx": $$5,
     "./islands/Tabs.tsx": $$6,
     "./islands/Username.tsx": $$7,
   },

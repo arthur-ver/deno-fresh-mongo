@@ -27,6 +27,12 @@ export interface UserSchema {
     title: string;
     text: string;
   };
+  socialAccounts?: {
+    instagram?: string;
+    twitter?: string;
+    youtube?: string;
+    linkedin?: string;
+  };
 }
 
 export class MongoDBDatabase {

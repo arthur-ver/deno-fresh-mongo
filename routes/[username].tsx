@@ -13,11 +13,9 @@ import {
 import ProfilePicture from "../islands/ProfilePicture.tsx";
 import Username from "../islands/Username.tsx";
 import Bio from "../islands/Bio.tsx";
-import CTAButton from "../islands/CTAButton.tsx";
-import FollowButton from "../islands/FollowButton.tsx";
 import Announcement from "../islands/Announcement.tsx";
 import Tabs from "../islands/Tabs.tsx";
-import SocialLinks from "../islands/SocialLinks.tsx";
+import SocialAccounts from "../islands/SocialAccounts.tsx";
 
 interface UserData {
   user: UserSchema;
@@ -47,7 +45,7 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
   }
 
   const { user, links, updates } = data;
-  const { avatar, bio, username, announcement } = user;
+  const { avatar, bio, username, announcement, socialAccounts } = user;
 
   return (
     <main class={tw`w-10/12 sm:w-96 mx-auto`}>
@@ -62,7 +60,7 @@ export default function GreetPage({ data }: PageProps<UserData | null>) {
           <Bio
             bio={bio}
           />
-          <SocialLinks />
+          <SocialAccounts socialAccounts={socialAccounts} />
           {announcement &&
             (
               <Announcement
