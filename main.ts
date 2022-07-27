@@ -14,7 +14,22 @@ import { virtualSheet } from "twind/sheets";
 
 const sheet = virtualSheet();
 sheet.reset();
-setup({ ...config, sheet });
+setup({
+  ...config,
+  sheet,
+  theme: {
+    extend: {
+      fontFamily: {
+        serif: "Alegreya, serif",
+        sans: "Assistant, sans-serif",
+      },
+    },
+  },
+  preflight: {
+    "@import":
+      "url('https://fonts.googleapis.com/css2?family=Alegreya&family=Assistant:wght@300;400&display=swap');",
+  },
+});
 
 function render(ctx: RenderContext, render: InnerRenderFunction) {
   const snapshot = ctx.state.get("twind") as unknown[] | null;
