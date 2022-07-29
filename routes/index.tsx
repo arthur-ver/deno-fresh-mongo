@@ -38,46 +38,65 @@ export const handler: Handlers = {
       return ctx.render();
     }
 
-    const accessToken = await auth0Api.getAccessToken(code, url.origin);
-    const email = await auth0Api.getUserEmail(accessToken);
+    try {
+      const accessToken = await auth0Api.getAccessToken(code, url.origin);
+      const email = await auth0Api.getUserEmail(accessToken);
 
-    let user = await database.getUser({ email });
+      let user = await database.getUser({ email });
 
-    if (!user) {
-      const _id = await database.createUser(email);
-      user = await database.getUser({ _id });
+      if (!user) {
+        const _id = await database.createUser(email);
+        user = await database.getUser({ _id });
+      }
+
+      const response = await ctx.render(user);
+      setCookie(response.headers, {
+        name: "deploy_access_token",
+        value: accessToken,
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+      });
+      return response;
+    } catch (e) {
+      return ctx.render();
     }
-
-    const response = await ctx.render(user);
-    setCookie(response.headers, {
-      name: "deploy_access_token",
-      value: accessToken,
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true,
-    });
-    return response;
   },
 };
 
 export default function Home({ data }: PageProps) {
   if (!data) {
     return (
-      <main
-        class={tw
-          `w-10/12 sm:w-96 mx-auto flex flex-col items-center bg-green-100 mt-28 px-2 pt-16 pb-6 rounded-3xl`}
-      >
-        <h1 class={tw`font-serif text-4xl text-center`}>
-          A front page to your corner of the internet.
-        </h1>
-        <img src="./character_vector_1.svg" />
-        <a href="/api/login" class={tw`w-5/6`}>
-          <div
-            class={tw
-              `font-serif flex items-center justify-center space-x-2 bg-blue-700 text-gray-100 font-bold text-sm py-3 pl-6 pr-4 rounded-full cursor-pointer mt-2 hover:bg-blue-800 hover:shadow transition duration-150 ease-in-out`}
-          >
-            <span class={tw`text-xl font-light`}>Sign in</span>
+      <main class={tw`h-screen w-full ${css({ "background": "#ffc017" })}`}>
+        <div
+          class={tw
+            `max-w-6xl h-full items-center mx-auto flex justify-between px-20`}
+        >
+          <div class={tw`w-1/2`}>
+            <h1 class={tw`font-serif text-7xl mb-8`}>
+              A front page <br />to your corner of the internet.
+            </h1>
+            <h3
+              class={tw`font-sans leading-7 text-2xl mb-14 ${
+                css({ "color": "#292929" })
+              }`}
+            >
+              All your social accounts, links and updates in one place.
+            </h3>
+            <a href="/api/login" class={tw`block w-1/2`}>
+              <div
+                class={tw
+                  `font-sans flex items-center justify-center space-x-2 font-bold text-sm text-white py-2 pl-6 pr-4 rounded-full cursor-pointer mt-2 ${
+                    css({ "background": "#080808" })
+                  }`}
+              >
+                <span class={tw`text-xl font-light`}>Reserve yours</span>
+              </div>
+            </a>
           </div>
-        </a>
+          <div class={tw`w-1/2`}>
+            <img class={tw`w-full`} src="./character_vector_1.svg" />
+          </div>
+        </div>
       </main>
     );
   }

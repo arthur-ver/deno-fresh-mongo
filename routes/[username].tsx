@@ -28,12 +28,13 @@ export const handler: Handlers<UserData | null> = {
     const { username } = ctx.params;
 
     const user = await database.getUser({ username });
-    const links = await database.getLinks(user.linksList);
-    const updates = await database.getUpdates(user.updatesList);
 
     if (!user) {
       return ctx.render(null);
     }
+
+    const links = await database.getLinks(user.linksList);
+    const updates = await database.getUpdates(user.updatesList);
 
     return ctx.render({ user, links, updates });
   },
