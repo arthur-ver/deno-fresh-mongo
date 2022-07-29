@@ -67,34 +67,45 @@ export default function Home({ data }: PageProps) {
   if (!data) {
     return (
       <main class={tw`h-screen w-full ${css({ "background": "#ffc017" })}`}>
-        <div
-          class={tw
-            `max-w-6xl h-full items-center mx-auto flex justify-between px-20`}
-        >
-          <div class={tw`w-1/2`}>
-            <h1 class={tw`font-serif text-7xl mb-8`}>
-              A front page <br />to your corner of the internet.
-            </h1>
-            <h3
-              class={tw`font-sans leading-7 text-2xl mb-14 ${
-                css({ "color": "#292929" })
-              }`}
-            >
-              All your social accounts, links and updates in one place.
-            </h3>
-            <a href="/api/login" class={tw`block w-1/2`}>
-              <div
-                class={tw
-                  `font-sans flex items-center justify-center space-x-2 font-bold text-sm text-white py-2 pl-6 pr-4 rounded-full cursor-pointer mt-2 ${
-                    css({ "background": "#080808" })
-                  }`}
-              >
-                <span class={tw`text-xl font-light`}>Reserve yours</span>
-              </div>
-            </a>
+        <div class={tw`flex flex-col h-full`}>
+          <div class={tw`bg-black`}>
+            <div class={tw`max-w-6xl mx-auto px-20 py-2 text-center`}>
+              <h1 class={tw`text-white text-md font-sans`}>
+                Go grab your username! Emojis allowed! 🎉
+              </h1>
+            </div>
           </div>
-          <div class={tw`w-1/2`}>
-            <img class={tw`w-full`} src="./character_vector_1.svg" />
+          <div
+            class={tw
+              `max-w-6xl mx-auto px-20 items-center flex justify-between ${
+                css({ "flex-grow": "1" })
+              }`}
+          >
+            <div class={tw`w-1/2`}>
+              <h1 class={tw`font-serif text-7xl mb-8`}>
+                A front page <br />to your corner of the internet.
+              </h1>
+              <h3
+                class={tw`font-sans leading-7 text-2xl mb-14 ${
+                  css({ "color": "#292929" })
+                }`}
+              >
+                All your social accounts, links and updates in one place.
+              </h3>
+              <a href="/api/login" class={tw`block w-1/2`}>
+                <div
+                  class={tw
+                    `font-sans flex items-center justify-center space-x-2 font-bold text-white py-2 pl-6 pr-4 rounded-full cursor-pointer mt-2 ${
+                      css({ "background": "#080808" })
+                    }`}
+                >
+                  <span class={tw`text-xl font-light`}>Reserve yours</span>
+                </div>
+              </a>
+            </div>
+            <div class={tw`w-1/2`}>
+              <img class={tw`w-full`} src="./character_vector_1.svg" />
+            </div>
           </div>
         </div>
       </main>
